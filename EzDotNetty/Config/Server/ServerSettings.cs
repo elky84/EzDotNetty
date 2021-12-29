@@ -1,6 +1,6 @@
-namespace EzDotNetty.Config
+namespace EzDotNetty.Config.Server
 {
-    public static class ServerSettings
+    public static class Settings
     {
         public static bool IsSsl
         {

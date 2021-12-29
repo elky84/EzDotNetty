@@ -15,3 +15,13 @@ The purpose of this project is to easily build and operate a server using DotNet
 ## github
 
 <https://github.com/elky84/EzDotNetty>
+
+## Example
+
+### TestClient
+
+<https://github.com/elky84/EzDotNetty/TestClient>
+
+### TestServer
+
+<https://github.com/elky84/EzDotNetty/TestServer>

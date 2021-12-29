@@ -3,9 +3,9 @@ using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using EzDotNetty.Log;
 
-namespace EzDotNetty.NetworkHandler
+namespace EzDotNetty.Handler.Server
 {
-    public abstract class ServerHandler : ChannelHandlerAdapter
+    public abstract class NetworkHandler : ChannelHandlerAdapter
     {
 
         public override void ChannelActive(IChannelHandlerContext context)
