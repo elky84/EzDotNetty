@@ -14,7 +14,7 @@ namespace EzDotNetty.Bootstrap.Client
 {
     public class BootstrapHelper
     {
-        static public async Task RunClientAsync<T>() where T : NetworkHandler, new()
+        static public async Task RunClientAsync<T>(Action<T>? action = null) where T : NetworkHandler, new()
         {
             Serilog.Log.Logger = new LoggerConfiguration()
                             .MinimumLevel.Information()
@@ -51,10 +51,15 @@ namespace EzDotNetty.Bootstrap.Client
                         pipeline.AddLast("framing-enc", new LengthFieldPrepender(4));
                         pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(ushort.MaxValue, 0, 4, 0, 4));
 
-                        pipeline.AddLast("handler", new T());
+                        var handler = new T();
+                        action?.Invoke(handler);
+
+                        pipeline.AddLast("handler", handler);
                     }));
 
                 IChannel clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
+
+                Log.Loggers.Message!.Information("Started Client");
 
                 Console.ReadLine();
 

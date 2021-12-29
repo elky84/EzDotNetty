@@ -75,6 +75,8 @@ namespace EzDotNetty.Bootstrap.Server
 
                 IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
 
+                Log.Loggers.Message!.Information("Started Server");
+
                 Console.ReadLine();
 
                 await boundChannel.CloseAsync();
