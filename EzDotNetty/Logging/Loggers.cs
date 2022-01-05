@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace EzDotNetty.Log
+namespace EzDotNetty.Logging
 {
     public static class Loggers
     {

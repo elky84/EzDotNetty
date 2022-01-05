@@ -20,7 +20,7 @@ namespace EzDotNetty.Bootstrap.Server
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Log.Loggers.Init();
+            Logging.Loggers.Init();
 
             IEventLoopGroup bossGroup;
             IEventLoopGroup workerGroup;
@@ -75,7 +75,7 @@ namespace EzDotNetty.Bootstrap.Server
 
                 IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
 
-                Log.Loggers.Message!.Information("Started Server");
+                Logging.Loggers.Message!.Information("Started Server");
 
                 Console.ReadLine();
 

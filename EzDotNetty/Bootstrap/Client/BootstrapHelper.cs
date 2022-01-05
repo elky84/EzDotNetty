@@ -21,7 +21,7 @@ namespace EzDotNetty.Bootstrap.Client
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Log.Loggers.Init();
+            Logging.Loggers.Init();
 
             var group = new MultithreadEventLoopGroup();
 
@@ -59,7 +59,7 @@ namespace EzDotNetty.Bootstrap.Client
 
                 IChannel clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
 
-                Log.Loggers.Message!.Information("Started Client");
+                Logging.Loggers.Message!.Information("Started Client");
 
                 Console.ReadLine();
 

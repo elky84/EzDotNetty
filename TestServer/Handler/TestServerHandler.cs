@@ -1,7 +1,7 @@
 ﻿using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
 using EzDotNetty.Handler.Server;
-using EzDotNetty.Log;
+using EzDotNetty.Logging;
 
 namespace TestServer.Handler
 {
