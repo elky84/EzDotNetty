@@ -13,9 +13,11 @@
 
 	<PackageDescription>Easily usable with DotNetty</PackageDescription>
     <RepositoryUrl>https://github.com/elky84/EzDotNetty</RepositoryUrl>
+	<PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
+	<None Include="..\LICENSE" Pack="true" PackagePath="\"/>
     <None Include="..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
