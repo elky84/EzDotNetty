@@ -1,6 +1,5 @@
 ﻿using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using EzDotnetty.Logging;
 using EzDotNetty.Handler.Client;
 using EzDotNetty.Logging;
 using System.Threading;

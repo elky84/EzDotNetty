@@ -1,6 +1,6 @@
 ﻿using EzDotnetty.Types;
 
-namespace EzDotnetty.Logging
+namespace EzDotNetty.Logging
 {
     public partial class LoggerId : Enumeration
     {

@@ -1,4 +1,4 @@
-﻿using EzDotnetty.Logging;
+﻿using EzDotNetty.Logging;
 using Serilog;
 
 namespace EzDotNetty.Logging

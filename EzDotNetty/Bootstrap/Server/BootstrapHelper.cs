@@ -5,7 +5,7 @@ using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using DotNetty.Transport.Libuv;
-using EzDotnetty.Logging;
+using EzDotNetty.Logging;
 using EzDotNetty.Config;
 using Serilog;
 using System.Security.Cryptography.X509Certificates;

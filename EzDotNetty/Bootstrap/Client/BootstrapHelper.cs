@@ -9,7 +9,7 @@ using EzDotNetty.Handler.Client;
 using EzDotNetty.Config;
 using System.Net;
 using Serilog;
-using EzDotnetty.Logging;
+using EzDotNetty.Logging;
 
 namespace EzDotNetty.Bootstrap.Client
 {

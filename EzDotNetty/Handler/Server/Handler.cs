@@ -1,7 +1,6 @@
 using System.Text;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using EzDotnetty.Logging;
 using EzDotNetty.Logging;
 
 namespace EzDotNetty.Handler.Server

@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EzDotNetty\EzDotnetty.csproj" />
+    <ProjectReference Include="..\EzDotNetty\EzDotNetty.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using EzDotnetty.Logging;
+using EzDotNetty.Logging;
 using System.Text;
 
 namespace EzDotNetty.Handler.Client
@@ -29,7 +29,7 @@ namespace EzDotNetty.Handler.Client
                     {
                         if (_actions[typeof(T)].Contains(callback))
                         {
-                            Logging.Collection.Get(LoggerId.Message)!.Error("Callback already subscribed..");
+                            Collection.Get(LoggerId.Message)!.Error("Callback already subscribed..");
                             return 0;
                         }
                     }
@@ -48,7 +48,7 @@ namespace EzDotNetty.Handler.Client
             }
             catch (Exception ex)
             {
-                Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
+                Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
                 return 0;
             }
         }
