@@ -18,23 +18,5 @@ namespace EzDotNetty.Util
             return value;
         }
 
-        static public List<T>? DeserializeToList<T>(this string path) where T : class
-        {
-            ObjectCache cache = MemoryCache.Default;
-            if (cache[path] is not List<T> list)
-            {
-                var deserializedList = JsonConvert.DeserializeObject<List<T>>(File.ReadAllText(path));
-                if (deserializedList != null)
-                {
-                    var filePaths = new List<string> { path };
-                    var policy = new CacheItemPolicy();
-                    policy.ChangeMonitors.Add(new HostFileChangeMonitor(filePaths));
-                    cache.Set(path, deserializedList, policy);
-                }
-                return deserializedList;
-            }
-            else
-                return list;
-        }
     }
 }

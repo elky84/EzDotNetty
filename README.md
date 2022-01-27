@@ -37,6 +37,12 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.13
+
+Remove some logger.
+Initialize all logger in Loggin.Collection.
+Need register LoggerId. (Per LoggerId type. Include inheritance)
+
 ### v1.0.12
 
 Fix invalid namespace. (wrong namespace, sln, csproj word issue)

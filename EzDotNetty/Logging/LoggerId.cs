@@ -1,4 +1,4 @@
-﻿using EzDotnetty.Types;
+﻿using EzDotNetty.Types;
 
 namespace EzDotNetty.Logging
 {
@@ -9,7 +9,6 @@ namespace EzDotNetty.Logging
         {
         }
 
-        public static readonly LoggerId Buff = new(1, nameof(Buff));
-        public static readonly LoggerId Message = new(2, nameof(Message));
+        public static readonly LoggerId Message = new(1, nameof(Message));
     }
 }

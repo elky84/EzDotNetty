@@ -14,14 +14,15 @@ namespace EzDotNetty.Bootstrap.Server
 {
     public class BootstrapHelper
     {
-        static public async Task RunServerAsync<T>() where T : ChannelHandlerAdapter, new()
+        static public async Task RunServerAsync<THandler>() 
+            where THandler : ChannelHandlerAdapter, new()
         {
-            Serilog.Log.Logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                             .MinimumLevel.Information()
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Logging.Collection.Init();
+            Collection.Init<LoggerId>();
 
             IEventLoopGroup bossGroup;
             IEventLoopGroup workerGroup;
@@ -71,12 +72,12 @@ namespace EzDotNetty.Bootstrap.Server
                         pipeline.AddLast("framing-enc", new LengthFieldPrepender(4));
                         pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(ushort.MaxValue, 0, 4, 0, 4));
 
-                        pipeline.AddLast("handler", new T());
+                        pipeline.AddLast("handler", new THandler());
                     }));
 
                 IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
 
-                Logging.Collection.Get(LoggerId.Message)!.Information("Started Server");
+                Collection.Get(LoggerId.Message)!.Information("Started Server");
 
                 Console.ReadLine();
 

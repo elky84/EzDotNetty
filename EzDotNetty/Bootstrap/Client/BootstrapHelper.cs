@@ -5,24 +5,25 @@ using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using EzDotNetty.Handler.Client;
 using EzDotNetty.Config;
 using System.Net;
 using Serilog;
 using EzDotNetty.Logging;
+using EzDotNetty.Handler.Client;
 
 namespace EzDotNetty.Bootstrap.Client
 {
     public class BootstrapHelper
     {
-        static public async Task RunClientAsync<T>(Action<T>? action = null) where T : NetworkHandler, new()
+        static public async Task RunClientAsync<THandler>(Action<THandler>? action = null) 
+            where THandler : NetworkHandler, new()
         {
-            Serilog.Log.Logger = new LoggerConfiguration()
+            Log.Logger = new LoggerConfiguration()
                             .MinimumLevel.Information()
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Logging.Collection.Init();
+            Collection.Init<LoggerId>();
 
             var group = new MultithreadEventLoopGroup();
 
@@ -52,7 +53,7 @@ namespace EzDotNetty.Bootstrap.Client
                         pipeline.AddLast("framing-enc", new LengthFieldPrepender(4));
                         pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(ushort.MaxValue, 0, 4, 0, 4));
 
-                        var handler = new T();
+                        var handler = new THandler();
                         action?.Invoke(handler);
 
                         pipeline.AddLast("handler", handler);
@@ -60,7 +61,7 @@ namespace EzDotNetty.Bootstrap.Client
 
                 IChannel clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
 
-                Logging.Collection.Get(LoggerId.Message)!.Information("Started Client");
+                Collection.Get(LoggerId.Message)!.Information("Started Client");
 
                 Console.ReadLine();
 

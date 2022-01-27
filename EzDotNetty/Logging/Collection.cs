@@ -1,4 +1,5 @@
-﻿using EzDotNetty.Logging;
+﻿using EzDotNetty.Types;
+using EzDotNetty.Logging;
 using Serilog;
 
 namespace EzDotNetty.Logging
@@ -20,14 +21,22 @@ namespace EzDotNetty.Logging
 
         private static readonly Dictionary<LoggerId, LoggerInfo> Infos = new();
 
-        public static void Init()
+        public static void Init<T>() where T : LoggerId
         {
-            New(LoggerId.Buff, Serilog.Events.LogEventLevel.Information);
-            New(LoggerId.Message, Serilog.Events.LogEventLevel.Information);
+            foreach(var loggerId in Enumeration.GetAll<T>())
+            {
+                New(loggerId, Serilog.Events.LogEventLevel.Information);
+            }
         }
         public static Serilog.Core.Logger? Get(LoggerId loggerId)
         {
-            return Infos.TryGetValue(loggerId, out var info) ? info.Logger : null;
+            if (!Infos.TryGetValue(loggerId, out var info))
+            {
+                Log.Logger.Fatal($"Get({loggerId}) Failed. Not registered Logger.");
+                return null;
+            }
+
+            return info.Logger;
         }
 
         public static Serilog.Core.LoggingLevelSwitch? LevelSwitch(LoggerId loggerId)
