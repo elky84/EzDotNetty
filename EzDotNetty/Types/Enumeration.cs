@@ -40,6 +40,9 @@ namespace EzDotnetty.Types
             return Name.GetHashCode();
         }
 
+        public static T? Get<T>(string name) where T : Enumeration => 
+            GetAll<T>().FirstOrDefault(x => x.Name == name);
+
         // Other utility methods ...
     }
 }
