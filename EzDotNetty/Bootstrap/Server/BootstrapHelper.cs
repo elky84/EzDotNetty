@@ -5,6 +5,7 @@ using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using DotNetty.Transport.Libuv;
+using EzDotnetty.Logging;
 using EzDotNetty.Config;
 using Serilog;
 using System.Security.Cryptography.X509Certificates;
@@ -20,7 +21,7 @@ namespace EzDotNetty.Bootstrap.Server
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Logging.Loggers.Init();
+            Logging.Collection.Init();
 
             IEventLoopGroup bossGroup;
             IEventLoopGroup workerGroup;
@@ -75,7 +76,7 @@ namespace EzDotNetty.Bootstrap.Server
 
                 IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
 
-                Logging.Loggers.Message!.Information("Started Server");
+                Logging.Collection.Get(LoggerId.Message)!.Information("Started Server");
 
                 Console.ReadLine();
 

@@ -9,6 +9,7 @@ using EzDotNetty.Handler.Client;
 using EzDotNetty.Config;
 using System.Net;
 using Serilog;
+using EzDotnetty.Logging;
 
 namespace EzDotNetty.Bootstrap.Client
 {
@@ -21,7 +22,7 @@ namespace EzDotNetty.Bootstrap.Client
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Logging.Loggers.Init();
+            Logging.Collection.Init();
 
             var group = new MultithreadEventLoopGroup();
 
@@ -59,7 +60,7 @@ namespace EzDotNetty.Bootstrap.Client
 
                 IChannel clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
 
-                Logging.Loggers.Message!.Information("Started Client");
+                Logging.Collection.Get(LoggerId.Message)!.Information("Started Client");
 
                 Console.ReadLine();
 

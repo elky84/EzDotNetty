@@ -34,3 +34,9 @@ The purpose of this project is to easily build and operate a server using DotNet
 ### TestServer
 
 <https://github.com/elky84/EzDotNetty/TestServer>
+
+## version history
+
+### v1.0.9
+
+Improve Logging Class. (change to use LoggerId)

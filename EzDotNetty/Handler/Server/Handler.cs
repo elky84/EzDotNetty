@@ -1,6 +1,7 @@
 using System.Text;
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
+using EzDotnetty.Logging;
 using EzDotNetty.Logging;
 
 namespace EzDotNetty.Handler.Server
@@ -33,7 +34,7 @@ namespace EzDotNetty.Handler.Server
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)
         {
-            Loggers.Message!.Error($"<Exception:{exception}>");
+            Collection.Get(LoggerId.Message)!.Error($"<Exception:{exception}>");
             context.CloseAsync();
         }
 

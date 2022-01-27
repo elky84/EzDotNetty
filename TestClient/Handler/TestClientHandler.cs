@@ -1,5 +1,6 @@
 ﻿using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
+using EzDotnetty.Logging;
 using EzDotNetty.Handler.Client;
 using EzDotNetty.Logging;
 using System.Threading;
@@ -14,17 +15,17 @@ namespace TestClient.Handler
             msg.WriteString("OnConnect Client", System.Text.Encoding.UTF8);
             context.WriteAndFlushAsync(msg);
 
-            Loggers.Message!.Information($"OnChannelActive:{context.Channel.Id}");
+            Collection.Get(LoggerId.Message)!.Information($"OnChannelActive:{context.Channel.Id}");
         }
 
         public override void OnChannelUnregistered(IChannelHandlerContext context)
         {
-            Loggers.Message!.Information($"OnChannelUnregistered:{context.Channel.Id}");
+            Collection.Get(LoggerId.Message)!.Information($"OnChannelUnregistered:{context.Channel.Id}");
         }
 
         public override void OnReceive(IChannelHandlerContext context, string str)
         {
-            Loggers.Message!.Information(str);
+            Collection.Get(LoggerId.Message)!.Information(str);
 
             Thread.Sleep(1000);
 
