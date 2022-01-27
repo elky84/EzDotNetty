@@ -37,6 +37,10 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.11
+
+Added log level switch function. (SeriLog)
+
 ### v1.0.10
 
 Added Enumeration Get method.
