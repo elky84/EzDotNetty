@@ -1,10 +1,17 @@
-﻿using EzDotNetty.Bootstrap.Client;
-using TestClient.Handler;
-
 namespace TestClient
 {
-    class Program
+    internal static class Program
     {
-        static void Main() => BootstrapHelper.RunClientAsync<TestClientHandler>().Wait();
+        /// <summary>
+        ///  The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            // To customize application configuration such as set high DPI settings or default font,
+            // see https://aka.ms/applicationconfiguration.
+            ApplicationConfiguration.Initialize();
+            Application.Run(new TestClientForm());
+        }
     }
 }

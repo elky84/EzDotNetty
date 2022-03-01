@@ -14,7 +14,13 @@ namespace EzDotNetty.Bootstrap.Server
 {
     public class BootstrapHelper
     {
-        static public async Task RunServerAsync<THandler>() 
+        static private IEventLoopGroup? BossGroup;
+
+        static private IEventLoopGroup? WorkerGroup;
+
+        static bool LoggerInitialized = false;
+
+        static public async Task<IChannel> RunServerAsync<THandler>() 
             where THandler : ChannelHandlerAdapter, new()
         {
             Log.Logger = new LoggerConfiguration()
@@ -22,21 +28,22 @@ namespace EzDotNetty.Bootstrap.Server
                             .WriteTo.Console()
                             .CreateLogger();
 
-            Collection.Init<LoggerId>();
-
-            IEventLoopGroup bossGroup;
-            IEventLoopGroup workerGroup;
+            if (!LoggerInitialized)
+            {
+                Collection.Init<LoggerId>();
+                LoggerInitialized = true;
+            }
 
             if (Config.Server.Settings.UseLibuv)
             {
                 var dispatcher = new DispatcherEventLoopGroup();
-                bossGroup = dispatcher;
-                workerGroup = new WorkerEventLoopGroup(dispatcher);
+                BossGroup = dispatcher;
+                WorkerGroup = new WorkerEventLoopGroup(dispatcher);
             }
             else
             {
-                bossGroup = new MultithreadEventLoopGroup(1);
-                workerGroup = new MultithreadEventLoopGroup();
+                BossGroup = new MultithreadEventLoopGroup(1);
+                WorkerGroup = new MultithreadEventLoopGroup();
             }
 
             X509Certificate2? tlsCertificate = null;
@@ -44,52 +51,48 @@ namespace EzDotNetty.Bootstrap.Server
             {
                 tlsCertificate = new X509Certificate2(Path.Combine(Helper.ProcessDirectory, "dotnetty.com.pfx"), "password");
             }
-            try
+
+            var bootstrap = new ServerBootstrap();
+            bootstrap.Group(BossGroup, WorkerGroup);
+
+            if (Config.Server.Settings.UseLibuv)
             {
-                var bootstrap = new ServerBootstrap();
-                bootstrap.Group(bossGroup, workerGroup);
+                bootstrap.Channel<TcpServerChannel>();
+            }
+            else
+            {
+                bootstrap.Channel<TcpServerSocketChannel>();
+            }
 
-                if (Config.Server.Settings.UseLibuv)
+            bootstrap
+                .Option(ChannelOption.SoBacklog, 100)
+                .Handler(new LoggingHandler("SRV-LSTN"))
+                .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
                 {
-                    bootstrap.Channel<TcpServerChannel>();
-                }
-                else
-                {
-                    bootstrap.Channel<TcpServerSocketChannel>();
-                }
-
-                bootstrap
-                    .Option(ChannelOption.SoBacklog, 100)
-                    .Handler(new LoggingHandler("SRV-LSTN"))
-                    .ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
+                    IChannelPipeline pipeline = channel.Pipeline;
+                    if (tlsCertificate != null)
                     {
-                        IChannelPipeline pipeline = channel.Pipeline;
-                        if (tlsCertificate != null)
-                        {
-                            pipeline.AddLast("tls", TlsHandler.Server(tlsCertificate));
-                        }
-                        pipeline.AddLast(new LoggingHandler("SRV-CONN"));
-                        pipeline.AddLast("framing-enc", new LengthFieldPrepender(4));
-                        pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(ushort.MaxValue, 0, 4, 0, 4));
+                        pipeline.AddLast("tls", TlsHandler.Server(tlsCertificate));
+                    }
+                    pipeline.AddLast(new LoggingHandler("SRV-CONN"));
+                    pipeline.AddLast("framing-enc", new LengthFieldPrepender(4));
+                    pipeline.AddLast("framing-dec", new LengthFieldBasedFrameDecoder(ushort.MaxValue, 0, 4, 0, 4));
 
-                        pipeline.AddLast("handler", new THandler());
-                    }));
+                    pipeline.AddLast("handler", new THandler());
+                }));
 
-                IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
+            IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
 
-                Collection.Get(LoggerId.Message)!.Information("Started Server");
+            Collection.Get(LoggerId.Message)!.Information("Started Server");
 
-                Console.ReadLine();
+            return boundChannel;
+        }
 
-                await boundChannel.CloseAsync();
-            }
-            finally
-            {
-                await Task.WhenAll(
-                    bossGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
-                    workerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)));
-            }
-
+        static public async Task GracefulCloseAsync()
+        {
+            await Task.WhenAll(
+                BossGroup!.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
+                WorkerGroup!.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)));
         }
     }
 }

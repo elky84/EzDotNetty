@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<None Update="dotnetty.com.pfx">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+	<None Update="appsettings.json">
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<Folder Include="json\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Include=".\json\**" LinkBase="json">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\EzDotNetty\EzDotNetty.csproj" />
+	<ProjectReference Include="..\Protocols\Protocols.csproj" />
+  </ItemGroup>
+</Project>

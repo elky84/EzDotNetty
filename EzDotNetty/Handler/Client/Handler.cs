@@ -165,20 +165,22 @@ namespace EzDotNetty.Handler.Client
             {
                 var buffer = message as IByteBuffer;
 
+                var id = buffer!.ReadInt();
+
                 byte[] bytes = new byte[buffer!.ReadableBytes];
                 buffer.ReadBytes(bytes);
 
-                OnReceive(context, Encoding.UTF8.GetString(bytes, 0, bytes.Length));
+                OnReceive(context, id, bytes);
             }
             catch (Exception e)
             {
-                Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + e);
+                Collection.Get(LoggerId.Message)!.Error("Exception: " + e);
             }
         }
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception e)
         {
-            Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + e);
+            Collection.Get(LoggerId.Message)!.Error("Exception: " + e);
             context.CloseAsync();
         }
 
@@ -194,6 +196,6 @@ namespace EzDotNetty.Handler.Client
 
         public abstract void OnChannelUnregistered(IChannelHandlerContext context);
 
-        public abstract void OnReceive(IChannelHandlerContext context, string str);
+        public abstract void OnReceive(IChannelHandlerContext context, int id, byte[] bytes);
     }
 }

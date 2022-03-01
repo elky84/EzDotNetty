@@ -23,10 +23,12 @@ namespace EzDotNetty.Handler.Server
         public override void ChannelRead(IChannelHandlerContext context, object byteBuffer)
         {
             var buffer = byteBuffer as IByteBuffer;
+            var id = buffer!.ReadInt();
+
             var bytes = new byte[buffer!.ReadableBytes];
             buffer.ReadBytes(bytes);
 
-            OnReceive(context, Encoding.UTF8.GetString(bytes, 0, bytes.Length));
+            OnReceive(context, id, bytes);
         }
 
         public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
@@ -41,6 +43,6 @@ namespace EzDotNetty.Handler.Server
 
         public abstract void OnChannelInactive(IChannelHandlerContext context);
 
-        public abstract void OnReceive(IChannelHandlerContext context, string str);
+        public abstract void OnReceive(IChannelHandlerContext context, int id, byte[] bytes);
     }
 }

@@ -66,6 +66,9 @@ namespace EzDotNetty.Logging
 
             if(logger != null)
             {
+                if(Infos.ContainsKey(loggerId))
+                    Infos.Remove(loggerId);
+
                 Infos.Add(loggerId, new LoggerInfo(logger, logLevelSwitch));
             }
             return logger;

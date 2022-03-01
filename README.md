@@ -40,6 +40,11 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.14
+
+Changed Newtonsoft.json to use ZeroFormatter as Protocol function.
+Changed to a more explicit example where the test client and test server send and receive Protocols directly.
+
 ### v1.0.13
 
 Remove some logger.

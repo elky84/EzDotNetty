@@ -1,0 +1,12 @@
+[
+  {
+    "Id": "기사",
+    "Name": "기사",
+    "Sprite": "male_knight"
+  },
+  {
+    "Id": "레인저",
+    "Name": "레인저",
+    "Sprite": "female_archer"
+  }
+]

@@ -1,29 +1,52 @@
-﻿using DotNetty.Buffers;
-using DotNetty.Transport.Channels;
+﻿using DotNetty.Transport.Channels;
+using Serilog;
+using ServerShared.NetworkHandler;
+using ServerShared.Service;
+using ServerShared.Worker;
 using EzDotNetty.Handler.Server;
-using EzDotNetty.Logging;
 
 namespace TestServer.Handler
 {
     public class TestServerHandler : NetworkHandler
     {
+        public SessionService SessionService { get; set; }
+
+        public ServerDispatcher ServerDispatcher { get; set; }
+
         public override void OnChannelActive(IChannelHandlerContext context)
         {
-            Collection.Get(LoggerId.Message)!.Information($"OnChannelActive:{context.Channel.Id}");
+            this.SessionService = ServerService.GetInstance<SessionService>();
+            this.ServerDispatcher = ServerService.GetInstance<ServerDispatcher>();
+
+            Log.Information($"OnChannelActive() <Context:{context}>");
+
+            SessionService.Add(context);
         }
 
         public override void OnChannelInactive(IChannelHandlerContext context)
         {
-            Collection.Get(LoggerId.Message)!.Information($"OnChannelInactive:{context.Channel.Id}");
+            Log.Information($"OnChannelInactive() <Context:{context}>");
+
+            SessionService.Remove(context);
         }
 
-        public override void OnReceive(IChannelHandlerContext context, string str)
+        public override void OnReceive(IChannelHandlerContext context, int id, byte[] bytes)
         {
-            Collection.Get(LoggerId.Message)!.Information(str);
+            var session = SessionService.Get(context);
+            if (null == session)
+            {
+                Log.Error($"Session Get Failed() <Context:{context}>");
+                return;
+            }
 
-            var msg = Unpooled.Buffer();
-            msg.WriteString($"OnReceive:{context.Channel.Id}", System.Text.Encoding.UTF8);
-            context.WriteAndFlushAsync(msg);
+            var message = new Message
+            {
+                Id = (Protocols.Id.Request)id,
+                Data = bytes,
+                Session = session
+            };
+
+            ServerDispatcher.Push(message);
         }
     }
 }
