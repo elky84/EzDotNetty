@@ -56,6 +56,7 @@ namespace TestClient
         public void OnClose(IChannelHandlerContext context)
         {
             OnLog($"OnClose() <Context:{context}>");
+            Channel = null;
             if (context == ChannelHandlerContext)
             {
                 ChannelHandlerContext = null;
