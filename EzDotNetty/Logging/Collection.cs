@@ -55,8 +55,10 @@ namespace EzDotNetty.Logging
 
         public static Serilog.Core.Logger? New(LoggerId loggerId, Serilog.Events.LogEventLevel logEventLevel)
         {
-            var logLevelSwitch = new Serilog.Core.LoggingLevelSwitch();
-            logLevelSwitch.MinimumLevel = logEventLevel;
+            Serilog.Core.LoggingLevelSwitch? logLevelSwitch = new()
+            {
+                MinimumLevel = logEventLevel
+            };
 
             var logger = new LoggerConfiguration()
                 .MinimumLevel.ControlledBy(logLevelSwitch)

@@ -37,12 +37,12 @@ namespace EzDotNetty.Service
     {
         public static void IntervalInSeconds(string timerId, double interval, Action task)
         {
-            interval = interval / 3600;
+            interval /= 3600;
             SchedulerService.Instance.ScheduleTask(timerId, interval, task);
         }
         public static void IntervalInMinutes(string timerId, double interval, Action task)
         {
-            interval = interval / 60;
+            interval /= 60;
             SchedulerService.Instance.ScheduleTask(timerId, interval, task);
         }
         public static void IntervalInHours(string timerId, double interval, Action task)
@@ -51,7 +51,7 @@ namespace EzDotNetty.Service
         }
         public static void IntervalInDays(string timerId, double interval, Action task)
         {
-            interval = interval * 24;
+            interval *= 24;
             SchedulerService.Instance.ScheduleTask(timerId, interval, task);
         }
 
