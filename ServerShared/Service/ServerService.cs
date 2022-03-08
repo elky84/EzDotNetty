@@ -46,6 +46,22 @@ namespace ServerShared.Service
             Container.Register<T>(new SingletoneLifetime());
         }
 
+        public static void Register(Type serviceType, Type implementingType)
+        {
+            Container.Register(serviceType, implementingType);
+        }
+
+        public static void Register(Type serviceType, Type implementingType, ILifetime lifeTime)
+        {
+            Container.Register(serviceType, implementingType, lifeTime);
+        }
+
+        public static void RegisterSingletone(Type serviceType, Type implementingType)
+        {
+            Container.Register(serviceType, implementingType, new SingletoneLifetime());
+        }
+
+
         public static void PostConstruct()
         {
         }
