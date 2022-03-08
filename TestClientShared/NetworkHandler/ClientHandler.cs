@@ -29,6 +29,12 @@ namespace TestClientShared.NetworkHandler
             PublishMethod = typeof(ClientHandler).GetMethod("Publish")!;
         }
 
+        public void Release()
+        {
+            OnConnect = null;
+            OnClose = null;
+        }
+
         public override void OnChannelActive(IChannelHandlerContext context)
         {
             OnConnect?.Invoke(context);

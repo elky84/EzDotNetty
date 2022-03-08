@@ -189,6 +189,8 @@ namespace TestClient
 
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            ClientHandler?.Release();
+
             ClientHandler?.ClientDispatcher?.Release();
             Task.WhenAll(CloseSocket(), BootstrapHelper.GracefulCloseAsync());
         }
