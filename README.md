@@ -88,6 +88,10 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.15
+
+Change private set of Enumeration to set for json deserialize
+
 ### v1.0.14
 
 Changed Newtonsoft.json to use ZeroFormatter as Protocol function.
