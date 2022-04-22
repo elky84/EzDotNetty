@@ -88,6 +88,10 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.16
+
+added file logging to default option.
+
 ### v1.0.15
 
 Change private set of Enumeration to set for json deserialize

@@ -26,6 +26,7 @@ namespace EzDotNetty.Bootstrap.Server
             Log.Logger = new LoggerConfiguration()
                             .MinimumLevel.Information()
                             .WriteTo.Console()
+                            .WriteTo.File($"logs/{System.Diagnostics.Process.GetCurrentProcess().ProcessName}_.log", rollingInterval: RollingInterval.Day)
                             .CreateLogger();
 
             if (!LoggerInitialized)
