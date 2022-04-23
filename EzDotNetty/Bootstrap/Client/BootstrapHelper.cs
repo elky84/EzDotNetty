@@ -7,7 +7,6 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using EzDotNetty.Config;
 using System.Net;
-using Serilog;
 using EzDotNetty.Logging;
 using EzDotNetty.Handler.Client;
 
@@ -22,11 +21,7 @@ namespace EzDotNetty.Bootstrap.Client
         static public async Task<IChannel> RunClientAsync<THandler>(Action<THandler>? action = null) 
             where THandler : NetworkHandler, new()
         {
-            Log.Logger = new LoggerConfiguration()
-                            .MinimumLevel.Information()
-                            .WriteTo.Console()
-                            .WriteTo.File($"logs/{System.Diagnostics.Process.GetCurrentProcess().ProcessName}_.log", rollingInterval: RollingInterval.Day)
-                            .CreateLogger();
+            LogConfiguration.Initialize();
 
             if(!LoggerInitialized)
             {

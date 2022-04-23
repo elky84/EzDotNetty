@@ -23,11 +23,7 @@ namespace EzDotNetty.Bootstrap.Server
         static public async Task<IChannel> RunServerAsync<THandler>() 
             where THandler : ChannelHandlerAdapter, new()
         {
-            Log.Logger = new LoggerConfiguration()
-                            .MinimumLevel.Information()
-                            .WriteTo.Console()
-                            .WriteTo.File($"logs/{System.Diagnostics.Process.GetCurrentProcess().ProcessName}_.log", rollingInterval: RollingInterval.Day)
-                            .CreateLogger();
+            LogConfiguration.Initialize();
 
             if (!LoggerInitialized)
             {

@@ -88,6 +88,10 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.17
+
+Added file logging configuration from serilog.json.
+
 ### v1.0.16
 
 added file logging to default option.
