@@ -20,8 +20,6 @@ namespace EzDotNetty.Config.Client
 
         public static int Size => int.Parse(Helper.Configuration["size"]);
 
-        public static string UserName => Helper.Configuration["userName"];
-
         public static bool UseLibuv
         {
             get
