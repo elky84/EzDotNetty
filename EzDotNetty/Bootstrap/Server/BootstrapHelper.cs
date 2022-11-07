@@ -5,9 +5,8 @@ using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
 using DotNetty.Transport.Libuv;
-using EzDotNetty.Logging;
 using EzDotNetty.Config;
-using Serilog;
+using EzDotNetty.Logging;
 using System.Security.Cryptography.X509Certificates;
 
 namespace EzDotNetty.Bootstrap.Server
@@ -20,7 +19,7 @@ namespace EzDotNetty.Bootstrap.Server
 
         static bool LoggerInitialized = false;
 
-        static public async Task<IChannel> RunServerAsync<THandler>() 
+        static public async Task<IChannel> RunServerAsync<THandler>()
             where THandler : ChannelHandlerAdapter, new()
         {
             LogConfiguration.Initialize();
