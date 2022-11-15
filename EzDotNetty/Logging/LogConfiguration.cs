@@ -26,5 +26,22 @@ namespace EzDotNetty.Logging
                 .CreateLogger();
             }
         }
+
+
+        public static Serilog.Core.Logger? New(string name, Serilog.Events.LogEventLevel logEventLevel)
+        {
+            Serilog.Core.LoggingLevelSwitch? logLevelSwitch = new()
+            {
+                MinimumLevel = logEventLevel
+            };
+
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.ControlledBy(logLevelSwitch)
+                .WriteTo.File($"{name}.log")
+                .WriteTo.Console()
+                .CreateLogger();
+
+            return logger;
+        }
     }
 }

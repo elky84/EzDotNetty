@@ -1,6 +1,6 @@
 ﻿using LightInject;
+using Serilog;
 using ServerShared.Model;
-using EzDotNetty.Logging;
 
 namespace ServerShared.Service
 {
@@ -26,7 +26,7 @@ namespace ServerShared.Service
                 return false;
             }
 
-            Collection.Get(LoggerId.Message)!.Information($"Login() <Name:{login.Name}>");
+            Log.Logger.Information($"Login() <Name:{login.Name}>");
 
             SessionService.SetSessionName(session, login.Name);
 
@@ -42,12 +42,12 @@ namespace ServerShared.Service
                 return false;
             }
 
-            if(session.Room != null)
+            if (session.Room != null)
             {
                 session.Room.Leave(session, new Protocols.Request.Leave { });
             }
 
-            Collection.Get(LoggerId.Message)!.Information($"Logout() <Name:{session.Name}>");
+            Log.Logger.Information($"Logout() <Name:{session.Name}>");
             SessionService.UnsetSessionName(session);
 
             session.Send(new Protocols.Response.Logout { });

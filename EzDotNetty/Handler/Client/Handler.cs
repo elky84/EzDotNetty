@@ -1,7 +1,6 @@
 using DotNetty.Buffers;
 using DotNetty.Transport.Channels;
-using EzDotNetty.Logging;
-using System.Text;
+using Serilog;
 
 namespace EzDotNetty.Handler.Client
 {
@@ -29,7 +28,7 @@ namespace EzDotNetty.Handler.Client
                     {
                         if (_actions[typeof(T)].Contains(callback))
                         {
-                            Collection.Get(LoggerId.Message)!.Error("Callback already subscribed..");
+                            Log.Logger.Error("Callback already subscribed..");
                             return 0;
                         }
                     }
@@ -48,7 +47,7 @@ namespace EzDotNetty.Handler.Client
             }
             catch (Exception ex)
             {
-                Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: " + ex);
                 return 0;
             }
         }
@@ -72,14 +71,14 @@ namespace EzDotNetty.Handler.Client
 
                     if (actions.Remove(callback) == false)
                     {
-                        Logging.Collection.Get(LoggerId.Message)!.Error(String.Format("remove subscription error for {0}", typeof(T).Name));
+                        Log.Logger.Error(String.Format("remove subscription error for {0}", typeof(T).Name));
 
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: " + ex);
             }
         }
 
@@ -92,14 +91,14 @@ namespace EzDotNetty.Handler.Client
                     List<object>? actions;
                     if (_actions.TryGetValue(type, out actions) == false)
                     {
-                        Logging.Collection.Get(LoggerId.Message)!.Error(String.Format("remove subscription error for {0},{1}", type.Name, hash));
+                        Log.Logger.Error(String.Format("remove subscription error for {0},{1}", type.Name, hash));
                         return;
                     }
 
                     var action = actions.FirstOrDefault(x => x.GetHashCode() == hash);
                     if (action == null)
                     {
-                        Logging.Collection.Get(LoggerId.Message)!.Error(String.Format("remove subscription error for {0},{1}", type.Name, hash));
+                        Log.Logger.Error(String.Format("remove subscription error for {0},{1}", type.Name, hash));
                         return;
                     }
 
@@ -108,7 +107,7 @@ namespace EzDotNetty.Handler.Client
             }
             catch (Exception ex)
             {
-                Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: " + ex);
             }
         }
 
@@ -126,7 +125,7 @@ namespace EzDotNetty.Handler.Client
                     }
                     else
                     {
-                        Logging.Collection.Get(LoggerId.Message)!.Error($"Not Defined ClientHandler. {msg}");
+                        Log.Logger.Error($"Not Defined ClientHandler. {msg}");
                         return;
                     }
                 }
@@ -143,14 +142,14 @@ namespace EzDotNetty.Handler.Client
                         catch (Exception ex)
                         {
                             // TODO: this entry should be removed
-                            Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
+                            Log.Logger.Error("Exception: " + ex);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logging.Collection.Get(LoggerId.Message)!.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: " + ex);
             }
         }
 
@@ -174,13 +173,13 @@ namespace EzDotNetty.Handler.Client
             }
             catch (Exception e)
             {
-                Collection.Get(LoggerId.Message)!.Error("Exception: " + e);
+                Log.Logger.Error("Exception: " + e);
             }
         }
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception e)
         {
-            Collection.Get(LoggerId.Message)!.Error("Exception: " + e);
+            Log.Logger.Error("Exception: " + e);
             context.CloseAsync();
         }
 

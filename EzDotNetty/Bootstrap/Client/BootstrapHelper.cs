@@ -3,12 +3,13 @@ using DotNetty.Handlers.Logging;
 using DotNetty.Handlers.Tls;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
+using EzDotNetty.Config;
+using EzDotNetty.Handler.Client;
+using EzDotNetty.Logging;
+using Serilog;
+using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using EzDotNetty.Config;
-using System.Net;
-using EzDotNetty.Logging;
-using EzDotNetty.Handler.Client;
 
 namespace EzDotNetty.Bootstrap.Client
 {
@@ -16,18 +17,10 @@ namespace EzDotNetty.Bootstrap.Client
     {
         static private MultithreadEventLoopGroup? EventLoopGroup;
 
-        static bool LoggerInitialized = false;
-
-        static public async Task<IChannel> RunClientAsync<THandler>(Action<THandler>? action = null) 
+        static public async Task<IChannel> RunClientAsync<THandler>(Action<THandler>? action = null)
             where THandler : NetworkHandler, new()
         {
             LogConfiguration.Initialize();
-
-            if(!LoggerInitialized)
-            {
-                Collection.Init<LoggerId>();
-                LoggerInitialized = true;
-            }
 
             EventLoopGroup = new MultithreadEventLoopGroup();
 
@@ -65,7 +58,7 @@ namespace EzDotNetty.Bootstrap.Client
 
             IChannel clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
 
-            Collection.Get(LoggerId.Message)!.Information("Started Client");
+            Log.Logger.Information("Started Client");
             return clientChannel;
         }
 

@@ -7,6 +7,7 @@ using DotNetty.Transport.Channels.Sockets;
 using DotNetty.Transport.Libuv;
 using EzDotNetty.Config;
 using EzDotNetty.Logging;
+using Serilog;
 using System.Security.Cryptography.X509Certificates;
 
 namespace EzDotNetty.Bootstrap.Server
@@ -17,18 +18,10 @@ namespace EzDotNetty.Bootstrap.Server
 
         static private IEventLoopGroup? WorkerGroup;
 
-        static bool LoggerInitialized = false;
-
         static public async Task<IChannel> RunServerAsync<THandler>()
             where THandler : ChannelHandlerAdapter, new()
         {
             LogConfiguration.Initialize();
-
-            if (!LoggerInitialized)
-            {
-                Collection.Init<LoggerId>();
-                LoggerInitialized = true;
-            }
 
             if (Config.Server.Settings.UseLibuv)
             {
@@ -79,7 +72,7 @@ namespace EzDotNetty.Bootstrap.Server
 
             IChannel boundChannel = await bootstrap.BindAsync(Config.Server.Settings.Port);
 
-            Collection.Get(LoggerId.Message)!.Information("Started Server");
+            Log.Logger.Information("Started Server");
 
             return boundChannel;
         }

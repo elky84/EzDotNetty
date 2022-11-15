@@ -1,5 +1,5 @@
 using DotNetty.Transport.Channels;
-using EzDotNetty.Logging;
+using Serilog;
 using System.Reflection;
 using ZeroFormatter;
 
@@ -64,7 +64,7 @@ namespace TestClientShared.NetworkHandler
             }
             catch (TargetInvocationException exception)
             {
-                Collection.Get(LoggerId.Message)!.Error($"TargetInvocationException. {exception.Message}");
+                Log.Logger.Error($"TargetInvocationException. {exception.Message}");
             }
         }
     }
