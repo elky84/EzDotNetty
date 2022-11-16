@@ -21,7 +21,7 @@ namespace EzDotNetty.Bootstrap.Server
         static public async Task<IChannel> RunServerAsync<THandler>()
             where THandler : ChannelHandlerAdapter, new()
         {
-            LogConfiguration.Initialize();
+            Loggers.Initialize();
 
             if (Config.Server.Settings.UseLibuv)
             {

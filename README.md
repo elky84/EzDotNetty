@@ -88,6 +88,11 @@ The purpose of this project is to easily build and operate a server using DotNet
 
 ## version history
 
+### v1.0.19
+
+improve logging interface.
+changed namespace LogConfigration -> Loggers
+
 ### v1.0.18
 
 Arranged to use serilog default options

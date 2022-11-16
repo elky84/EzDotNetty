@@ -20,7 +20,7 @@ namespace EzDotNetty.Bootstrap.Client
         static public async Task<IChannel> RunClientAsync<THandler>(Action<THandler>? action = null)
             where THandler : NetworkHandler, new()
         {
-            LogConfiguration.Initialize();
+            Loggers.Initialize();
 
             EventLoopGroup = new MultithreadEventLoopGroup();
 
