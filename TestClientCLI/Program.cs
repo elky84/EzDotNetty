@@ -6,9 +6,9 @@ using TestClientShared.NetworkHandler;
 
 namespace TestClient
 {
-    class Program
+    internal static class Program
     {
-        static async Task Main()
+        private static async Task Main()
         {
             try
             {

@@ -2,12 +2,13 @@
 using Protocols.Response;
 using Serilog;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ServerShared.Model
 {
     public partial class Room
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         private int PlayerIndex { get; set; }
 
@@ -32,7 +33,7 @@ namespace ServerShared.Model
         {
             if(Sessions.ContainsValue(session))
             {
-                Log.Error($"Enter() <Desc:Already Entered User> <Session:{session}>");
+                Log.Error("Enter() <Desc:Already Entered User> <Session:{Session}>", session.ToString());
                 return false;
             }
 
@@ -45,14 +46,15 @@ namespace ServerShared.Model
 
             Positions.Enqueue(position);
 
-            foreach(var existingSession in Sessions.Values)
+            foreach (var existingSession in Sessions.Values.Where(existingSession => existingSession.PlayerIndex != null))
             {
-                session.Send(new Enter
-                {
-                    PlayerIndex = existingSession.PlayerIndex.Value,
-                    Position = existingSession.Position,
-                    Name = existingSession.Name,
-                });
+                if (existingSession.PlayerIndex != null)
+                    session.Send(new Enter
+                    {
+                        PlayerIndex = existingSession.PlayerIndex.Value,
+                        Position = existingSession.Position,
+                        Name = existingSession.Name,
+                    });
             }
 
             Sessions.Add(session.PlayerIndex.Value, session);
@@ -69,12 +71,16 @@ namespace ServerShared.Model
 
         public void Leave(Session session, Protocols.Request.Leave leave)
         {
-            Broadcast(new Leave
+            if (session.PlayerIndex != null)
             {
-                PlayerIndex = session.PlayerIndex.Value,
-            });
+                Broadcast(new Leave
+                {
+                    PlayerIndex = session.PlayerIndex.Value,
+                });
 
-            Sessions.Remove(session.PlayerIndex.Value);
+                Sessions.Remove(session.PlayerIndex.Value);
+            }
+
             session.PlayerIndex = null;
             session.Room = null;
         }
@@ -83,15 +89,18 @@ namespace ServerShared.Model
         {
             session.Position = move.Position;
 
-            Broadcast(new Move { Position = move.Position, PlayerIndex = session.PlayerIndex.Value });
+            if (session.PlayerIndex != null)
+                Broadcast(new Move { Position = move.Position, PlayerIndex = session.PlayerIndex.Value });
         }
 
+        // ReSharper disable once MemberCanBePrivate.Global
         public void Broadcast<T>(T t) where T : Header
         {
             Broadcast(Sessions.Values, t);
         }
 
-        public void Broadcast<TList, T>(TList sessions, T t) 
+        // ReSharper disable once MemberCanBePrivate.Global
+        public static void Broadcast<TList, T>(TList sessions, T t) 
             where T : Header
             where TList : IEnumerable<Session>
         {

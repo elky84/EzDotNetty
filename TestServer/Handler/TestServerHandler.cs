@@ -13,7 +13,7 @@ namespace TestServer.Handler
 
         public ServerDispatcher ServerDispatcher { get; set; }
 
-        public override void OnChannelActive(IChannelHandlerContext context)
+        protected override void OnChannelActive(IChannelHandlerContext context)
         {
             this.SessionService = ServerService.GetInstance<SessionService>();
             this.ServerDispatcher = ServerService.GetInstance<ServerDispatcher>();
@@ -23,14 +23,14 @@ namespace TestServer.Handler
             SessionService.Add(context);
         }
 
-        public override void OnChannelInactive(IChannelHandlerContext context)
+        protected override void OnChannelInactive(IChannelHandlerContext context)
         {
             Log.Information($"OnChannelInactive() <Context:{context}>");
 
             SessionService.Remove(context);
         }
 
-        public override void OnReceive(IChannelHandlerContext context, int id, byte[] bytes)
+        protected override void OnReceive(IChannelHandlerContext context, int id, byte[] bytes)
         {
             var session = SessionService.Get(context);
             if (null == session)

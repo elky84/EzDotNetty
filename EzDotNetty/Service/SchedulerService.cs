@@ -6,12 +6,12 @@ namespace EzDotNetty.Service
         private static SchedulerService? _instance;
         private Dictionary<string, Timer> timers = new Dictionary<string, Timer>();
         private SchedulerService() { }
-        public static SchedulerService Instance => _instance ?? (_instance = new SchedulerService());
+        public static SchedulerService Instance => _instance ??= new SchedulerService();
         public void ScheduleTask(string timerId, double intervalInHour, Action task)
         {
-            DateTime now = DateTime.Now;
-            DateTime firstRun = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0, 0);
-            TimeSpan timeToGo = firstRun - now;
+            var now = DateTime.Now;
+            var firstRun = new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0, 0);
+            var timeToGo = firstRun - now;
             if (timeToGo <= TimeSpan.Zero)
             {
                 timeToGo = TimeSpan.Zero;
@@ -25,11 +25,10 @@ namespace EzDotNetty.Service
 
         public void RemoveScheduler(string timerId)
         {
-            if (timers.TryGetValue(timerId, out var timer))
-            {
-                timer.Dispose();
-                timers.Remove(timerId);
-            }
+            if (!timers.TryGetValue(timerId, out var timer)) return;
+            
+            timer.Dispose();
+            timers.Remove(timerId);
         }
     }
 

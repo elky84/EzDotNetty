@@ -12,13 +12,7 @@ namespace EzDotNetty.Config
                 .Build();
         }
 
-        public static string ProcessDirectory
-        {
-            get
-            {
-                return AppDomain.CurrentDomain.BaseDirectory;
-            }
-        }
+        public static string ProcessDirectory => AppDomain.CurrentDomain.BaseDirectory;
 
         public static IConfigurationRoot Configuration { get; }
     }

@@ -3,13 +3,13 @@ using System.Net;
 namespace EzDotNetty.Config.Client
 {
 
-    public class Settings
+    public static class Settings
     {
         public static bool IsSsl
         {
             get
             {
-                string ssl = Helper.Configuration["ssl"];
+                var ssl = Helper.Configuration["ssl"];
                 return !string.IsNullOrEmpty(ssl) && bool.Parse(ssl);
             }
         }
@@ -24,7 +24,7 @@ namespace EzDotNetty.Config.Client
         {
             get
             {
-                string libuv = Helper.Configuration["libuv"];
+                var libuv = Helper.Configuration["libuv"];
                 return !string.IsNullOrEmpty(libuv) && bool.Parse(libuv);
             }
         }

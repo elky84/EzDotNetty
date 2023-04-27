@@ -8,17 +8,13 @@ namespace ServerShared.Service
     {
         private static ServiceContainer Container;
 
-        public class SingletoneLifetime : ILifetime
+        private class SingletoneLifetime : ILifetime
         {
-            object instances;
+            private object Instances;
 
             public object GetInstance(Func<object> instanceFactory, Scope currentScope)
             {
-                if (instances == null)
-                {
-                    instances = instanceFactory();
-                }
-                return instances;
+                return Instances ??= instanceFactory();
             }
         }
 
@@ -62,7 +58,7 @@ namespace ServerShared.Service
         }
 
 
-        public static void PostConstruct()
+        private static void PostConstruct()
         {
         }
 

@@ -35,12 +35,12 @@ namespace TestClientShared.NetworkHandler
             OnClose = null;
         }
 
-        public override void OnChannelActive(IChannelHandlerContext context)
+        protected override void OnChannelActive(IChannelHandlerContext context)
         {
             OnConnect?.Invoke(context);
         }
 
-        public override void OnChannelUnregistered(IChannelHandlerContext context)
+        protected override void OnChannelUnregistered(IChannelHandlerContext context)
         {
             OnClose?.Invoke(context);
         }
@@ -50,7 +50,7 @@ namespace TestClientShared.NetworkHandler
             return ZeroFormatterSerializer.Deserialize<T>(bytes);
         }
 
-        public override void OnReceive(IChannelHandlerContext context, int id, byte[] bytes)
+        protected override void OnReceive(IChannelHandlerContext context, int id, byte[] bytes)
         {
             var responseType = ProtocolsResponseAssembly!.GetType($"Protocols.Response.{(Protocols.Id.Response)id}");
             var genericMethod = DeserializeMethod.MakeGenericMethod(responseType!);

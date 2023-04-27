@@ -10,7 +10,7 @@ namespace EzDotNetty.Handler.Client
 
         protected Random Random = new();
 
-        public NetworkHandler() : base()
+        protected NetworkHandler() : base()
         {
         }
 
@@ -47,7 +47,7 @@ namespace EzDotNetty.Handler.Client
             }
             catch (Exception ex)
             {
-                Log.Logger.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: {Ex}", ex.Message);
                 return 0;
             }
         }
@@ -58,8 +58,7 @@ namespace EzDotNetty.Handler.Client
             {
                 lock (_actions)
                 {
-                    List<object>? actions;
-                    if (_actions.TryGetValue(typeof(T), out actions) == false)
+                    if (_actions.TryGetValue(typeof(T), out var actions) == false)
                     {
                         return;
                     }
@@ -71,14 +70,14 @@ namespace EzDotNetty.Handler.Client
 
                     if (actions.Remove(callback) == false)
                     {
-                        Log.Logger.Error(String.Format("remove subscription error for {0}", typeof(T).Name));
+                        Log.Logger.Error("remove subscription error for {Name}", typeof(T).Name);
 
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Logger.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: {Ex}", ex.Message);
             }
         }
 
@@ -88,17 +87,16 @@ namespace EzDotNetty.Handler.Client
             {
                 lock (_actions)
                 {
-                    List<object>? actions;
-                    if (_actions.TryGetValue(type, out actions) == false)
+                    if (_actions.TryGetValue(type, out var actions) == false)
                     {
-                        Log.Logger.Error(String.Format("remove subscription error for {0},{1}", type.Name, hash));
+                        Log.Logger.Error("remove subscription error for {TypeName} {Hash}", type.Name, hash);
                         return;
                     }
 
                     var action = actions.FirstOrDefault(x => x.GetHashCode() == hash);
                     if (action == null)
                     {
-                        Log.Logger.Error(String.Format("remove subscription error for {0},{1}", type.Name, hash));
+                        Log.Logger.Error("remove subscription error for {TypeName} {Hash}", type.Name, hash);
                         return;
                     }
 
@@ -107,11 +105,12 @@ namespace EzDotNetty.Handler.Client
             }
             catch (Exception ex)
             {
-                Log.Logger.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: {Ex}", ex.Message);
             }
         }
 
-        public void Publish<T>(T? msg = null) where T : class
+        // ReSharper disable once UnusedMember.Global
+        public static void Publish<T>(T? msg = null) where T : class
         {
             try
             {
@@ -125,31 +124,28 @@ namespace EzDotNetty.Handler.Client
                     }
                     else
                     {
-                        Log.Logger.Error($"Not Defined ClientHandler. {msg}");
+                        Log.Logger.Error("Not Defined ClientHandler. {Msg}", msg);
                         return;
                     }
                 }
 
-                if (actionsCopy.Any())
+                if (!actionsCopy.Any()) return;
+                
+                foreach (var a in actionsCopy)
                 {
-                    foreach (var a in actionsCopy)
+                    try
                     {
-                        try
-                        {
-                            var copyA = a;
-                            copyA(msg!);
-                        }
-                        catch (Exception ex)
-                        {
-                            // TODO: this entry should be removed
-                            Log.Logger.Error("Exception: " + ex);
-                        }
+                        a(msg!);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Logger.Error("Exception: {Ex}", ex.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Log.Logger.Error("Exception: " + ex);
+                Log.Logger.Error("Exception: {Ex}", ex.Message);
             }
         }
 
@@ -166,20 +162,20 @@ namespace EzDotNetty.Handler.Client
 
                 var id = buffer!.ReadInt();
 
-                byte[] bytes = new byte[buffer!.ReadableBytes];
+                var bytes = new byte[buffer!.ReadableBytes];
                 buffer.ReadBytes(bytes);
 
                 OnReceive(context, id, bytes);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Log.Logger.Error("Exception: " + e);
+                Log.Logger.Error("Exception: {Ex}", ex.Message);
             }
         }
 
-        public override void ExceptionCaught(IChannelHandlerContext context, Exception e)
+        public override void ExceptionCaught(IChannelHandlerContext context, Exception ex)
         {
-            Log.Logger.Error("Exception: " + e);
+            Log.Logger.Error("Exception: {Ex}", ex.Message);
             context.CloseAsync();
         }
 
@@ -190,11 +186,10 @@ namespace EzDotNetty.Handler.Client
         }
 
 
+        protected abstract void OnChannelActive(IChannelHandlerContext context);
 
-        public abstract void OnChannelActive(IChannelHandlerContext context);
+        protected abstract void OnChannelUnregistered(IChannelHandlerContext context);
 
-        public abstract void OnChannelUnregistered(IChannelHandlerContext context);
-
-        public abstract void OnReceive(IChannelHandlerContext context, int id, byte[] bytes);
+        protected abstract void OnReceive(IChannelHandlerContext context, int id, byte[] bytes);
     }
 }

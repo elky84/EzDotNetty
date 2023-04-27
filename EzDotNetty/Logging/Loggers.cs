@@ -6,7 +6,7 @@ namespace EzDotNetty.Logging
 {
     public static class Loggers
     {
-        public static ConcurrentDictionary<string, Serilog.Core.Logger> Container { get; } = new ConcurrentDictionary<string, Serilog.Core.Logger>();
+        private static ConcurrentDictionary<string, Serilog.Core.Logger> Container { get; } = new ConcurrentDictionary<string, Serilog.Core.Logger>();
 
         public static void Initialize()
         {
@@ -31,7 +31,7 @@ namespace EzDotNetty.Logging
         }
 
 
-        public static Serilog.Core.Logger? ForContext(string name, Serilog.Events.LogEventLevel logEventLevel = Serilog.Events.LogEventLevel.Information)
+        private static Serilog.Core.Logger? ForContext(string name, Serilog.Events.LogEventLevel logEventLevel = Serilog.Events.LogEventLevel.Information)
         {
             if (Container.TryGetValue(name, out var logger))
             {

@@ -26,7 +26,7 @@ namespace ServerShared.Service
                 return false;
             }
 
-            Log.Logger.Information($"Login() <Name:{login.Name}>");
+            Log.Logger.Information("Login() <Name:{LoginName}>", login.Name);
 
             SessionService.SetSessionName(session, login.Name);
 
@@ -47,7 +47,7 @@ namespace ServerShared.Service
                 session.Room.Leave(session, new Protocols.Request.Leave { });
             }
 
-            Log.Logger.Information($"Logout() <Name:{session.Name}>");
+            Log.Logger.Information("Logout() <Name:{SessionName}>", session.Name);
             SessionService.UnsetSessionName(session);
 
             session.Send(new Protocols.Response.Logout { });

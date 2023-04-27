@@ -28,14 +28,11 @@ namespace ServerShared.Service
             var session = Get(context);
             if (null == session)
             {
-                Log.Information($"Session Get Failed. <Context:{context}>");
+                Log.Information("Session Get Failed. <Context:{Context}>", context);
                 return;
             }
 
-            if (session.Room != null)
-            {
-                session.Room.Leave(session, new Protocols.Request.Leave { });
-            }
+            session.Room?.Leave(session, new Protocols.Request.Leave { });
 
             UnsetSessionName(session);
 
@@ -44,11 +41,10 @@ namespace ServerShared.Service
 
         public void UnsetSessionName(Session session)
         {
-            if (!string.IsNullOrEmpty(session.Name) && SessionsByName.ContainsKey(session.Name))
-            {
-                SessionsByName.Remove(session.Name);
-                session.Name = string.Empty;
-            }
+            if (string.IsNullOrEmpty(session.Name) || !SessionsByName.ContainsKey(session.Name)) return;
+            
+            SessionsByName.Remove(session.Name);
+            session.Name = string.Empty;
         }
 
         public Session Get(IChannelHandlerContext context)

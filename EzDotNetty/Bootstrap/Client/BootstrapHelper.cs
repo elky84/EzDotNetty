@@ -15,9 +15,9 @@ namespace EzDotNetty.Bootstrap.Client
 {
     public class BootstrapHelper
     {
-        static private MultithreadEventLoopGroup? EventLoopGroup;
+        private static MultithreadEventLoopGroup? EventLoopGroup;
 
-        static public async Task<IChannel> RunClientAsync<THandler>(Action<THandler>? action = null)
+        public static async Task<IChannel> RunClientAsync<THandler>(Action<THandler>? action = null)
             where THandler : NetworkHandler, new()
         {
             Loggers.Initialize();
@@ -41,7 +41,7 @@ namespace EzDotNetty.Bootstrap.Client
                 .Option(ChannelOption.TcpNodelay, true)
                 .Handler(new ActionChannelInitializer<ISocketChannel>(channel =>
                 {
-                    IChannelPipeline pipeline = channel.Pipeline;
+                    var pipeline = channel.Pipeline;
 
                     if (cert != null)
                     {
@@ -56,13 +56,13 @@ namespace EzDotNetty.Bootstrap.Client
                     pipeline.AddLast("handler", handler);
                 }));
 
-            IChannel clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
+            var clientChannel = await bootstrap.ConnectAsync(new IPEndPoint(Config.Client.Settings.Host, Config.Client.Settings.Port));
 
             Log.Logger.Information("Started Client");
             return clientChannel;
         }
 
-        static public async Task GracefulCloseAsync()
+        public static async Task GracefulCloseAsync()
         {
             await EventLoopGroup!.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
         }

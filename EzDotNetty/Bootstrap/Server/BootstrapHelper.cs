@@ -14,11 +14,11 @@ namespace EzDotNetty.Bootstrap.Server
 {
     public class BootstrapHelper
     {
-        static private IEventLoopGroup? BossGroup;
+        private static IEventLoopGroup? BossGroup;
 
-        static private IEventLoopGroup? WorkerGroup;
+        private static IEventLoopGroup? WorkerGroup;
 
-        static public async Task<IChannel> RunServerAsync<THandler>()
+        public static async Task<IChannel> RunServerAsync<THandler>()
             where THandler : ChannelHandlerAdapter, new()
         {
             Loggers.Initialize();
@@ -77,7 +77,7 @@ namespace EzDotNetty.Bootstrap.Server
             return boundChannel;
         }
 
-        static public async Task GracefulCloseAsync()
+        public static async Task GracefulCloseAsync()
         {
             await Task.WhenAll(
                 BossGroup!.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),

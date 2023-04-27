@@ -20,7 +20,7 @@ namespace ServerShared.NetworkHandler
         [Inject]
         public PacketDispatcher PacketDispatcher { get; set; }
 
-        public MessageWorker MessageWorker { get; set; } = new MessageWorker();
+        private MessageWorker MessageWorker { get; set; } = new MessageWorker();
 
         private readonly Dictionary<string, MethodInfo> DispatcherMethodInfo = new();
 
@@ -34,16 +34,19 @@ namespace ServerShared.NetworkHandler
             ProtocolsRequestAssembly = AppDomain.CurrentDomain.GetAssemblies()
                 .FirstOrDefault(x => "Protocols.Request".StartsWith(x.GetName().Name));
 
-            var requestClasses = ProtocolsRequestAssembly.GetTypes()
-                .Where(x => x.IsClass && x.FullName.StartsWith("Protocols.Request"))
-                .Select(x => x.Name)
-                .ToHashSet();
-
-            DispatcherMethodInfo = typeof(PacketDispatcher).GetMethods().Where(x =>
+            if (ProtocolsRequestAssembly != null)
             {
-                var parameters = x.GetParameters();
-                return requestClasses.Contains(x.Name) && parameters[0].ParameterType == typeof(Session);
-            }).ToDictionary(x => x.Name);
+                var requestClasses = ProtocolsRequestAssembly.GetTypes()
+                    .Where(x => x.FullName != null && x.IsClass && x.FullName.StartsWith("Protocols.Request"))
+                    .Select(x => x.Name)
+                    .ToHashSet();
+
+                DispatcherMethodInfo = typeof(PacketDispatcher).GetMethods().Where(x =>
+                {
+                    var parameters = x.GetParameters();
+                    return requestClasses.Contains(x.Name) && parameters[0].ParameterType == typeof(Session);
+                }).ToDictionary(x => x.Name);
+            }
 
             MessageWorker.MessageCallback = Call;
             MessageWorker.Start();
@@ -54,7 +57,7 @@ namespace ServerShared.NetworkHandler
             MessageWorker.Push(message);
         }
 
-        public bool Call(Message message)
+        private bool Call(Message message)
         {
             try
             {
@@ -74,7 +77,7 @@ namespace ServerShared.NetworkHandler
                 if (e.InnerException?.GetType() == typeof(LogicException))
                 {
                     var logicException = (LogicException)e.InnerException;
-                    Log.Error($"exception catched. <Message:{logicException.Message}\n StackTrace:{logicException.StackTrace}>");
+                    Log.Error("exception catch. <Message:{LogicExceptionMessage}\\n StackTrace:{LogicExceptionStackTrace}>", logicException.Message, logicException.StackTrace);
                     message.Session.Send(new Protocols.Response.Error
                     {
                         Result = logicException.Result,
@@ -83,7 +86,7 @@ namespace ServerShared.NetworkHandler
                 }
                 else
                 {
-                    Log.Error($"exception catched. <Message:{e.Message}\n StackTrace:{e.StackTrace}>");
+                    Log.Error("exception catch. <Message:{EMessage}\\n StackTrace:{EStackTrace}>", e.Message, e.StackTrace);
                     message.Session.Send(new Protocols.Response.Error
                     {
                         Result = Protocols.Code.Result.Exception,
@@ -107,16 +110,18 @@ namespace ServerShared.NetworkHandler
             var typeName = message.Id.ToString();
             if (false == DispatcherMethodInfo.TryGetValue(typeName, out var method))
             {
-                Log.Error($"Not Find DispatcherMethod <Session:{session}> <TypeName:{typeName}> <Room:{room}>");
+                Log.Error("Not Find DispatcherMethod <Session:{Session}> <TypeName:{TypeName}> <Room:{Room}>", session, typeName, room);
                 return false;
             }
 
             var requestType = ProtocolsRequestAssembly.GetType($"Protocols.Request.{typeName}");
+            if (requestType == null) return false;
+
             var genericMethod = DeserializeMethod.MakeGenericMethod(requestType);
             return (bool)method.Invoke(PacketDispatcher, new object[] {
                 session,
                 genericMethod.Invoke(this, new object[] { message.Data })
-            });
+            })!;
         }
     }
 }

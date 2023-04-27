@@ -8,7 +8,7 @@ namespace EzDotNetty.Util
     {
         private static JsonSerializer JsonSerializer = new JsonSerializer();
 
-        static public T Populate<T>(this JObject extensionData) where T : new()
+        public static T Populate<T>(this JObject? extensionData) where T : new()
         {
             var value = new T();
             if (extensionData != null)

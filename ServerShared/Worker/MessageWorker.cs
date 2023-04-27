@@ -7,11 +7,11 @@ namespace ServerShared.Worker
 {
     public class Message
     {
-        public Session Session { get; set; }
+        public Session Session { get; init; }
 
-        public Protocols.Id.Request Id { get; set; }
+        public Protocols.Id.Request Id { get; init; }
 
-        public byte[] Data { get; set; }
+        public byte[] Data { get; init; }
 
         public Action Action { get; set; }
     }
@@ -24,11 +24,11 @@ namespace ServerShared.Worker
 
         public Callback MessageCallback { get; set; }
 
-        private ConcurrentQueue<Message> GlobalQueue { get; set; } = new ConcurrentQueue<Message>();
+        private ConcurrentQueue<Message> GlobalQueue { get; } = new();
 
         public MessageWorker()
         {
-            GlobalThread = new Thread(new ThreadStart(GlobalRun));
+            GlobalThread = new Thread(GlobalRun);
         }
 
         public void Push(Message message)
@@ -46,7 +46,7 @@ namespace ServerShared.Worker
             GlobalThread.Join();
         }
 
-        public void GlobalRun()
+        private void GlobalRun()
         {
             while (true)
             {

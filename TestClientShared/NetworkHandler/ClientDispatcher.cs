@@ -10,26 +10,26 @@ namespace TestClientShared.NetworkHandler
 
         protected Random Random { get; set; } = new Random();
 
-        public ClientDispatcher()
+        protected ClientDispatcher()
         {
-            ClientHandler.Subscribe<Protocols.Response.Login>(OnLogin);
-            ClientHandler.Subscribe<Protocols.Response.Logout>(OnLogout);
+            EzDotNetty.Handler.Client.NetworkHandler.Subscribe<Protocols.Response.Login>(OnLogin);
+            EzDotNetty.Handler.Client.NetworkHandler.Subscribe<Protocols.Response.Logout>(OnLogout);
 
-            ClientHandler.Subscribe<Protocols.Response.Enter>(OnEnter);
-            ClientHandler.Subscribe<Protocols.Response.Leave>(OnLeave);
-            ClientHandler.Subscribe<Protocols.Response.Move>(OnMove);
+            EzDotNetty.Handler.Client.NetworkHandler.Subscribe<Protocols.Response.Enter>(OnEnter);
+            EzDotNetty.Handler.Client.NetworkHandler.Subscribe<Protocols.Response.Leave>(OnLeave);
+            EzDotNetty.Handler.Client.NetworkHandler.Subscribe<Protocols.Response.Move>(OnMove);
 
-            ClientHandler.Subscribe<Protocols.Response.Error>(OnError);
+            EzDotNetty.Handler.Client.NetworkHandler.Subscribe<Protocols.Response.Error>(OnError);
         }
 
         public virtual void Release()
         {
-            ClientHandler.Unsubscribe<Protocols.Response.Login>(OnLogin);
-            ClientHandler.Unsubscribe<Protocols.Response.Error>(OnError);
-            ClientHandler.Unsubscribe<Protocols.Response.Enter>(OnEnter);
-            ClientHandler.Unsubscribe<Protocols.Response.Leave>(OnLeave);
-            ClientHandler.Unsubscribe<Protocols.Response.Move>(OnMove);
-            ClientHandler.Unsubscribe<Protocols.Response.Error>(OnError);
+            EzDotNetty.Handler.Client.NetworkHandler.Unsubscribe<Protocols.Response.Login>(OnLogin);
+            EzDotNetty.Handler.Client.NetworkHandler.Unsubscribe<Protocols.Response.Error>(OnError);
+            EzDotNetty.Handler.Client.NetworkHandler.Unsubscribe<Protocols.Response.Enter>(OnEnter);
+            EzDotNetty.Handler.Client.NetworkHandler.Unsubscribe<Protocols.Response.Leave>(OnLeave);
+            EzDotNetty.Handler.Client.NetworkHandler.Unsubscribe<Protocols.Response.Move>(OnMove);
+            EzDotNetty.Handler.Client.NetworkHandler.Unsubscribe<Protocols.Response.Error>(OnError);
         }
 
         protected abstract void OnLogin(Protocols.Response.Login login);

@@ -34,14 +34,14 @@ namespace EzDotNetty.Handler.Server
 
         public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)
         {
-            Log.Logger.Error($"<Exception:{exception}>");
+            Log.Logger.Error("<Exception:{ExceptionMessage}>", exception.Message);
             context.CloseAsync();
         }
 
-        public abstract void OnChannelActive(IChannelHandlerContext context);
+        protected abstract void OnChannelActive(IChannelHandlerContext context);
 
-        public abstract void OnChannelInactive(IChannelHandlerContext context);
+        protected abstract void OnChannelInactive(IChannelHandlerContext context);
 
-        public abstract void OnReceive(IChannelHandlerContext context, int id, byte[] bytes);
+        protected abstract void OnReceive(IChannelHandlerContext context, int id, byte[] bytes);
     }
 }

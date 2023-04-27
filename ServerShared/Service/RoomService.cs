@@ -9,7 +9,7 @@ namespace ServerShared.Service
 
         private readonly Dictionary<int, Room> Rooms = new();
 
-        public Room New(int roomId)
+        private Room New(int roomId)
         {
             var room = new Room
             {
@@ -20,23 +20,19 @@ namespace ServerShared.Service
             return room;
         }
 
-        public void Remove(int id)
+        private void Remove(int id)
         {
             Rooms.Remove(id);
         }
 
-        public Room Get(int id)
+        private Room Get(int id)
         {
             return Rooms.TryGetValue(id, out var room) ? room : null;
         }
 
         public void Enter(Session session, Protocols.Request.Enter enter)
         {
-            var room = Get(enter.RoomId);
-            if(room == null)
-            {
-                room = New(enter.RoomId);
-            }
+            var room = Get(enter.RoomId) ?? New(enter.RoomId);
 
             room.Enter(session, enter);
         }
@@ -46,7 +42,7 @@ namespace ServerShared.Service
             var room = session.Room;
             if (room == null)
             {
-                Log.Error($"Leave() <Desc:Not found room> <Session:{session}>");
+                Log.Error("Leave() <Desc:Not found room> <Session:{Session}>", session.ToString());
                 return;
             }
 
@@ -58,12 +54,12 @@ namespace ServerShared.Service
             }
         }
 
-        public void Move(Session session, Protocols.Request.Move move)
+        public static void Move(Session session, Protocols.Request.Move move)
         {
             var room = session.Room;
             if (room == null)
             {
-                Log.Error($"Leave() <Desc:Not found room> <Session:{session}>");
+                Log.Error("Leave() <Desc:Not found room> <Session:{Session}>", session.ToString());
                 return;
             }
 

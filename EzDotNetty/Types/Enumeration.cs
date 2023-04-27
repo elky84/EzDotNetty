@@ -5,14 +5,17 @@ namespace EzDotNetty.Types
     // [열거형 형식 대신 열거형 클래스 사용 | Microsoft Docs] (https://docs.microsoft.com/ko-kr/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/enumeration-classes-over-enum-types)
     public abstract class Enumeration : IComparable
     {
-        public string Name { get; set; }
+        // ReSharper disable once MemberCanBePrivate.Global
+        public string Name { get; }
 
+        // ReSharper disable once MemberCanBePrivate.Global
         public int Id { get; set; }
 
         protected Enumeration(int id, string name) => (Id, Name) = (id, name);
 
         public override string ToString() => Name;
 
+        // ReSharper disable once MemberCanBePrivate.Global
         public static IEnumerable<T> GetAll<T>() where T : Enumeration =>
             typeof(T).GetFields(BindingFlags.Public |
                                 BindingFlags.Static |
@@ -27,7 +30,7 @@ namespace EzDotNetty.Types
                 return false;
             }
 
-            var typeMatches = GetType().Equals(obj.GetType());
+            var typeMatches = GetType() == obj.GetType();
             var valueMatches = Id.Equals(otherValue.Id);
 
             return typeMatches && valueMatches;

@@ -6,9 +6,9 @@ using TestServer.Handler;
 
 namespace TestServer
 {
-    class Program
+    internal static class Program
     {
-        static async Task Main()
+        private static async Task Main()
         {
             ServerService.Register();
 
