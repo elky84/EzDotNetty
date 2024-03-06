@@ -1,5 +1,5 @@
 [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=elky-essay)](https://elky84.github.io)
-![Made with](https://img.shields.io/badge/made%20with-.NET7-blue.svg)
+![Made with](https://img.shields.io/badge/made%20with-.NET8-blue.svg)
 
 [![Publish Nuget Github Package](https://github.com/elky84/EzDotNetty/actions/workflows/publish_github.yml/badge.svg)](https://github.com/elky84/EzDotNetty/actions/workflows/publish_github.yml)
 [![Publish Nuget Package](https://github.com/elky84/EzDotNetty/actions/workflows/publish_nuget.yml/badge.svg)](https://github.com/elky84/EzDotNetty/actions/workflows/publish_nuget.yml)
@@ -20,7 +20,7 @@
 
 Easily usable with [DotNetty](https://github.com/Azure/DotNetty).
 
-Implemented by C# .NET 7.
+Implemented by C# .NET 8
 
 The purpose of this project is to easily build and operate a server using DotNetty.
 
@@ -87,6 +87,10 @@ The purpose of this project is to easily build and operate a server using DotNet
         - A class for the extend function that populates the ExtensionData part of Json.
 
 ## version history
+
+### v1.0.20
+
+use .NET 8
 
 ### v1.0.19
 
