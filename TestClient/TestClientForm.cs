@@ -3,16 +3,20 @@ using Serilog;
 using EzDotNetty.Bootstrap.Client;
 using TestClientShared.NetworkHandler;
 using TestClientShared.Util;
+using System.ComponentModel;
 
 namespace TestClient
 {
     public partial class TestClientForm : Form
     {
-        public IChannel? Channel { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        private IChannel? Channel { get; set; }
 
-        public ClientHandler? ClientHandler { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        private ClientHandler? ClientHandler { get; set; }
 
-        public IChannelHandlerContext? ChannelHandlerContext { get; set; }
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        private IChannelHandlerContext? ChannelHandlerContext { get; set; }
 
         private readonly Dictionary<int, PlayerControl> PlayerControls = new();
 

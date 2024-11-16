@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
 		<PackageId>EzDotNetty</PackageId>
-		<Version>1.0.20</Version>
+		<Version>1.0.21</Version>
 		<Authors>elky</Authors>
 		<Company>elky</Company>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -22,24 +22,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="LightInject" Version="5.5.0" />
+		<PackageReference Include="LightInject" Version="7.0.0" />
 		<PackageReference Include="LightInject.Annotation" Version="1.1.0" />
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.9" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.1.9" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.9" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Serilog" Version="2.10.0" />
-		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
-		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Serilog" Version="4.1.1-dev-02318" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="8.0.4" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
 		<PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-		<PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
-		<PackageReference Include="DotNetty.Buffers" Version="0.7.0" />
-		<PackageReference Include="DotNetty.Codecs" Version="0.7.0" />
-		<PackageReference Include="DotNetty.Common" Version="0.7.1" />
-		<PackageReference Include="DotNetty.Handlers" Version="0.7.0" />
-		<PackageReference Include="DotNetty.Transport" Version="0.7.0" />
-		<PackageReference Include="DotNetty.Transport.Libuv" Version="0.7.0" />
+		<PackageReference Include="System.Runtime.Caching" Version="9.0.0" />
+		<PackageReference Include="DotNetty.Buffers" Version="0.7.6" />
+		<PackageReference Include="DotNetty.Codecs" Version="0.7.6" />
+		<PackageReference Include="DotNetty.Common" Version="0.7.6" />
+		<PackageReference Include="DotNetty.Handlers" Version="0.7.6" />
+		<PackageReference Include="DotNetty.Transport" Version="0.7.6" />
+		<PackageReference Include="DotNetty.Transport.Libuv" Version="0.7.6" />
 	</ItemGroup>
 
 </Project>

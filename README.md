@@ -20,7 +20,7 @@
 
 Easily usable with [DotNetty](https://github.com/Azure/DotNetty).
 
-Implemented by C# .NET 8
+Implemented by C# .NET 9
 
 The purpose of this project is to easily build and operate a server using DotNetty.
 
@@ -87,6 +87,11 @@ The purpose of this project is to easily build and operate a server using DotNet
         - A class for the extend function that populates the ExtensionData part of Json.
 
 ## version history
+
+### v1.0.21
+
+use .NET 9
+update using packages.
 
 ### v1.0.20
 
